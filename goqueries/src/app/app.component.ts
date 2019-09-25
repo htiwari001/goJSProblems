@@ -26,22 +26,13 @@ export class AppComponent {
   layout1: any;
   constructor() {
     const $ = go.GraphObject.make;
-    //   this.layout1 = $(go.LayeredDigraphLayout,
-    //     { direction: 90, layeringOption: go.LayeredDigraphLayout.LayerLongestPathSource })
-
-    // ;
     this.layout1 =
-      $(go.TreeLayout,
-        {
-          angle: 90,
-          arrangement: go.TreeLayout.ArrangementVertical,
-          nodeSpacing: 10,
-          layerSpacing: 5,
-          setsPortSpot: false,
-          setsChildPortSpot: false,
-          // sorting:go.TreeLayout.SortingForwards
-
-        });
+    
+        $(go.GridLayout,
+          {
+            wrappingColumn: 3,
+            spacing : new go.Size(80,140)
+          });
 
     this.diagram = new go.Diagram();
     this.diagram.initialContentAlignment = go.Spot.Center;
@@ -70,7 +61,7 @@ export class AppComponent {
           // Pictures should normally have an explicit width and height.
           // This picture has a red background, only visible when there is no source set
           // or when the image is partially transparent.
-          { margin: 0, width: 250, height: 40 },
+          { margin: 0, width: 60, height: 60 },
           // Picture.source is data bound to the "source" attribute of the model data
           new go.Binding("source", "key", function (t) {
 
@@ -89,29 +80,36 @@ export class AppComponent {
           { strokeWidth: 3 }
         ),
         {
-          relinkableFrom: true, relinkableTo: true,
-          routing: go.Link.Orthogonal, fromSpot: go.Spot.Right, toSpot: go.Spot.Right
+          relinkableFrom: false, relinkableTo: false,
+          // routing: go.Link.Orthogonal,
+           fromSpot: go.Spot.AllSides,
+          toSpot: go.Spot.AllSides,
+           routing: go.Link.AvoidsNodes,
+          curve: go.Link.Bezier
+
         }
       );
 
     this.diagram.model = new go.GraphLinksModel([
-      { key: "A", color: "lightgreen" },
-      { key: "B1", color: "yellow" },
-      { key: "B2", color: "yellow" },
-      { key: "C", color: "lightblue" },
-      { key: "D1", color: "orange" },
-      { key: "D2", color: "orange" },
-      { key: "E", color: "pink" },
-      { key: "F", color: "lightgreen" },
-      { key: "Z1", color: "lightgreen" },
+      { key: "1", color: "lightgreen" },
+      { key: "2", color: "yellow" },
+      { key: "3", color: "yellow" },
+      { key: "4", color: "lightblue" },
+      { key: "5", color: "orange" },
+      { key: "6", color: "orange" },
+      { key: "7", color: "pink" },
+      { key: "8", color: "lightgreen" },
+      { key: "9", color: "lightgreen" },
       { key: "Z2", color: "yellow" }
     ], [
-        { from: "A", to: "B1", color: "green", "fromEndSegmentLength": 4, "toEndSegmentLength": 60 },
-        { from: "B2", to: "C", color: "green", "fromEndSegmentLength": 4, "toEndSegmentLength": 60 },
-        { from: "D1", to: "D2", color: "green", "fromEndSegmentLength": 4, "toEndSegmentLength": 60 },
-        { from: "E", to: "F", color: "green", "fromEndSegmentLength": 4, "toEndSegmentLength": 60 },
-        { from: "Z1", to: "Z2", color: "green", "fromEndSegmentLength": 4, "toEndSegmentLength": 60 },
-        // { from: "A", to: "D2", color: "red", "fromEndSegmentLength": 4, "toEndSegmentLength": 40 }
+      { from: "1", to: "2", color: "green"},
+        { from: "1", to: "4", color: "green"},
+        { from: "1", to: "5", color: "green"},
+        { from: "1", to: "6", color: "green"},
+        { from: "2", to: "8", color: "blue"},
+        { from: "3", to: "9", color: "blue"},
+        { from: "7", to: "8", color: "red"},
+        { from: "8", to: "9", color: "red"}
       ]);
 
     this.layout1.doLayout(this.diagram);
